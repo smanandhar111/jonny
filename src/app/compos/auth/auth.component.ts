@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from './auth.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   authenticatedUserInfo: any;
   userLoggedIn: boolean;
+  authSub: Subscription;
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.logStatus$.subscribe((data) => {
+    this.authSub = this.authService.logStatus$.subscribe((data) => {
       this.authenticatedUserInfo = data;
       this.userLoggedIn = this.authenticatedUserInfo != null;
     });
@@ -23,5 +25,8 @@ export class AuthComponent implements OnInit {
   }
   logout(): void {
     this.authService.googleLogout();
+  }
+  ngOnDestroy(): void {
+    this.authSub.unsubscribe();
   }
 }

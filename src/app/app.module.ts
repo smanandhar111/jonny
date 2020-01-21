@@ -10,12 +10,17 @@ import {AuthService} from './compos/auth/auth.service';
 import {environment} from '../environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
+import { ProductComponent } from './compos/product/product.component';
+import {ProductService} from './compos/product/product.service';
+import {AngularFireStorageModule} from '@angular/fire/storage';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AuthComponent
+    AuthComponent,
+    ProductComponent
   ],
   imports: [
     BrowserModule,
@@ -26,9 +31,10 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
     MatMenuModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFirestoreModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
