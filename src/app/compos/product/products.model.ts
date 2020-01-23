@@ -11,4 +11,7 @@ export interface ProductsModel {
   primeColor: string;
   title: string;
   type: string;
+  otherColors: string;
+  baseColor: string;
+  id?: string;
 }

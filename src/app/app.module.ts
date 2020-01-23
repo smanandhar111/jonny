@@ -4,7 +4,15 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule, MatMenuModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatMenuModule,
+  MatOptionModule,
+  MatSelectModule,
+  MatToolbarModule
+} from '@angular/material';
 import { AuthComponent } from './compos/auth/auth.component';
 import {AuthService} from './compos/auth/auth.service';
 import {environment} from '../environments/environment';
@@ -14,13 +22,26 @@ import { ProductComponent } from './compos/product/product.component';
 import {ProductService} from './compos/product/product.service';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
+import { AddProductComponent } from './compos/add-product/add-product.component';
+import {FormsModule} from '@angular/forms';
+import { GalleryComponent } from './compos/gallery/gallery.component';
+import {ProddisplayColorFilterPipe} from './compos/gallery/pipe/proddisplay-colorfilter.pipe';
+import {ProddisplayFilterPipe} from './compos/gallery/pipe/proddisplay-filter.pipe';
+import {ProddisplayNotSelfPipe} from './compos/gallery/pipe/proddisplay-notSelf.pipe';
+import {ProddisplayPricefilterPipe} from './compos/gallery/pipe/proddisplay-pricefilter.pipe';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    ProductComponent
+    ProductComponent,
+    AddProductComponent,
+    GalleryComponent,
+    ProddisplayColorFilterPipe,
+    ProddisplayFilterPipe,
+    ProddisplayNotSelfPipe,
+    ProddisplayPricefilterPipe
   ],
   imports: [
     BrowserModule,
@@ -29,10 +50,15 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
     MatButtonModule,
     MatToolbarModule,
     MatMenuModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireModule,
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    FormsModule
   ],
   providers: [AuthService, ProductService],
   bootstrap: [AppComponent]
