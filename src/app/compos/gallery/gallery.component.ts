@@ -30,8 +30,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
     });
   }
 
-  getProdDetails(id: number) {
-    this.router.navigate(['/prod-details', id]);
+  getProdDetails(id: string) {
+    this.router.navigate(['/product-info', id]);
   }
 
   // Copy of Clipboard

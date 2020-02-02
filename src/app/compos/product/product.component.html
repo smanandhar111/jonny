@@ -13,7 +13,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <a *ngIf="filterType" (click)="clearFilterType($event)" class="clear-input fa fa-times"></a>
+          <a *ngIf="filterType" (click)="clearFilterType($event)" class="material-icons clear-input">close</a>
 
           <!--PRICE FILTER-->
           <mat-form-field>
@@ -24,7 +24,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <a *ngIf="filterPrice" (click)="clearFilterType($event)" class="clear-input fa fa-times"></a>
+          <a *ngIf="filterPrice" (click)="clearFilterType($event)" class="material-icons clear-input">close</a>
 
           <!--COLOR FILTER-->
           <mat-form-field>
@@ -35,7 +35,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <a *ngIf="filterColor" (click)="clearFilterType($event)" class="clear-input fa fa-times"></a>
+          <a *ngIf="filterColor" (click)="clearFilterType($event)" class="material-icons clear-input">close</a>
         </div>
       </div>
     </div>

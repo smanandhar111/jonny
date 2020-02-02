@@ -29,6 +29,7 @@ import {ProddisplayColorFilterPipe} from './compos/gallery/pipe/proddisplay-colo
 import {ProddisplayFilterPipe} from './compos/gallery/pipe/proddisplay-filter.pipe';
 import {ProddisplayNotSelfPipe} from './compos/gallery/pipe/proddisplay-notSelf.pipe';
 import {ProddisplayPricefilterPipe} from './compos/gallery/pipe/proddisplay-pricefilter.pipe';
+import { ProductInfoComponent } from './compos/product-info/product-info.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import {ProddisplayPricefilterPipe} from './compos/gallery/pipe/proddisplay-pric
     ProddisplayColorFilterPipe,
     ProddisplayFilterPipe,
     ProddisplayNotSelfPipe,
-    ProddisplayPricefilterPipe
+    ProddisplayPricefilterPipe,
+    ProductInfoComponent
   ],
   imports: [
     BrowserModule,
