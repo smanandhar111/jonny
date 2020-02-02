@@ -1,8 +1,7 @@
 <div class="row display-view">
   <div class="repeater" *ngFor="let item of prodItems | prodFilter: filterType | prodPriceFilter: filterPrice | prodColorFilter: filterColor | notSelf: selfId">
-<!--    <a *ngIf="fromWishList" class="remove-item" (click)="removeItem(item.id)"><i class="fa fa-times-circle"></i></a>-->
-    <div class="circle"
-         [ngClass]="getDemClass(item.imgDem)" (click)="getProdDetails(item.id)">
+<!--    <a *ngIf="fromWishList" class="remove-item" (click)="removeItem(item.id)"><i class="aterial-icons">close</i></a>-->
+    <div class="circle" (click)="getProdDetails(item.id)">
       <img class="prod-img" src="../../../assets/img/{{item.imageUrl}}.jpg" alt="{{item.title}}">
       <div class="title">{{item.title}}</div>
       <div class="price">Rs. {{item.price}} </div>

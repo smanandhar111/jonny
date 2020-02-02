@@ -3,6 +3,7 @@ import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firest
 import {ProductsModel} from './products.model';
 import {EMPTY, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
+import {WishCart} from '../../models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,14 @@ export class ProductService {
   products$: Observable<ProductsModel[]>;
   errMessage: string;
   itemCollection: AngularFirestoreCollection<ProductsModel>;
+  wishCollection: AngularFirestoreCollection<WishCart>;
   constructor(private afs: AngularFirestore) {
     this.itemCollection = this.afs.collection('items');
+    this.wishCollection = this.afs.collection('wish');
   }
 
   getProducts() {
-    this.products$ = this.afs.collection('items').snapshotChanges().pipe(
+    this.products$ = this.itemCollection.snapshotChanges().pipe(
       map(changes => {
         return changes.map(a => {
           const resp = a.payload.doc.data() as ProductsModel;
@@ -33,4 +36,7 @@ export class ProductService {
   addItem(item: ProductsModel) {
     this.itemCollection.add(item);
   }
+  // addToWish(id: string) {
+  //   this.wishCollection.add(id);
+  // }
 }
