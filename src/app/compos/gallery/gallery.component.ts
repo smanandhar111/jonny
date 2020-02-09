@@ -1,17 +1,15 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
-import {Observable, Subscription} from 'rxjs';
-import {ProductsModel} from '../product/products.model';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
+
 import {ProductService} from '../product/product.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {catchError} from 'rxjs/operators';
 
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss']
 })
-export class GalleryComponent implements OnInit, OnDestroy {
-  productSub: Subscription;
-  prodItems: ProductsModel[];
+export class GalleryComponent {
   @Input() filterType: string;
   @Input() filterPrice: string;
   @Input() filterColor: string;
@@ -19,16 +17,16 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @Output() notify: EventEmitter<string> = new EventEmitter();
   @Input() selfId: string;
   @Input() adminMode: boolean;
+  errMessage: string;
+
+  products$ = this.productService.products$
+    .pipe(
+      catchError(err => this.errMessage = err)
+    );
   constructor(private productService: ProductService,
               private router: Router,
               private route: ActivatedRoute) { }
 
-  ngOnInit() {
-    this.productService.getProducts();
-    this.productSub = this.productService.products$.subscribe(data => {
-      this.prodItems = data;
-    });
-  }
 
   getProdDetails(id: string) {
     this.router.navigate(['/product-info', id]);
@@ -50,19 +48,5 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
   removeItem(id: string) {
     this.notify.emit(id);
-  }
-  getDemClass(imgDem: string) {
-    // if (imgDem === 'port') {
-    //   return 'port';
-    // } if (imgDem === 'wide') {
-    //   return 'wide';
-    // } if (imgDem === 'cube') {
-    //   return 'cube';
-    // }
-    // return 'cube';
-  }
-
-  ngOnDestroy(): void {
-    this.productSub.unsubscribe();
   }
 }

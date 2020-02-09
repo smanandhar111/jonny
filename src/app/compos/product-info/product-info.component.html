@@ -1,54 +1,55 @@
-<div class="ProdDisplayComp container" *ngIf="currentItem">
-  <div class="row">
+<div class="ProdDisplayComp container" *ngIf="product$ | async as items">
+  <div class="row" *ngFor="let item of items">
+
     <div class="col-sm-4 img-container row">
       <div class="primary-img">
-        <img *ngIf="imgCaro === 1" class="prod-img" src="../../../assets/img/{{currentItem.imageUrl}}.jpg"
-             alt="{{currentItem.title}}">
-        <img *ngIf="imgCaro === 2" class="prod-img" src="../../../assets/img/{{currentItem.imageUrlTwo}}.jpg"
-             alt="{{currentItem.title}}">
-        <img *ngIf="imgCaro === 3" class="prod-img" src="../../../assets/img/{{currentItem.imageUrlThree}}.jpg"
-             alt="{{currentItem.title}}">
-        <img *ngIf="imgCaro === 4" class="prod-img" src="../../../assets/img/{{currentItem.imageUrlFour}}.jpg"
-             alt="{{currentItem.title}}">
+        <img *ngIf="imgCaro === 1" class="prod-img" src="../../../assets/img/{{item.imageUrl}}.jpg"
+             alt="{{item.title}}">
+        <img *ngIf="imgCaro === 2" class="prod-img" src="../../../assets/img/{{item.imageUrlTwo}}.jpg"
+             alt="{{item.title}}">
+        <img *ngIf="imgCaro === 3" class="prod-img" src="../../../assets/img/{{item.imageUrlThree}}.jpg"
+             alt="{{item.title}}">
+        <img *ngIf="imgCaro === 4" class="prod-img" src="../../../assets/img/{{item.imageUrlFour}}.jpg"
+             alt="{{item.title}}">
       </div>
 
       <div class="extra-img-thumbnails">
-        <a class="extra-img-link" [ngClass]="{'active': imgCaro === 1}" *ngIf="currentItem.imageUrl" (click)="imgCaros(1)">
+        <a class="extra-img-link" [ngClass]="{'active': imgCaro === 1}" *ngIf="item.imageUrl" (click)="imgCaros(1)">
           <img class="prod-img"
-               src="../../../assets/img/{{currentItem.imageUrl}}.jpg"
-               alt="{{currentItem.title}}">
+               src="../../../assets/img/{{item.imageUrl}}.jpg"
+               alt="{{item.title}}">
         </a>
-        <a class="extra-img-link" [ngClass]="{'active': imgCaro === 2}" *ngIf="currentItem.imageUrlTwo" (click)="imgCaros(2)">
+        <a class="extra-img-link" [ngClass]="{'active': imgCaro === 2}" *ngIf="item.imageUrlTwo" (click)="imgCaros(2)">
           <img class="prod-img"
-               src="../../../assets/img/{{currentItem.imageUrlTwo}}.jpg"
-               alt="{{currentItem.title}}">
+               src="../../../assets/img/{{item.imageUrlTwo}}.jpg"
+               alt="{{item.title}}">
         </a>
-        <a class="extra-img-link" [ngClass]="{'active': imgCaro === 3}" *ngIf="currentItem.imageUrlThree" (click)="imgCaros(3)">
+        <a class="extra-img-link" [ngClass]="{'active': imgCaro === 3}" *ngIf="item.imageUrlThree" (click)="imgCaros(3)">
           <img class="prod-img"
-               src="../../../assets/img/{{currentItem.imageUrlThree}}.jpg"
-               alt="{{currentItem.title}}">
+               src="../../../assets/img/{{item.imageUrlThree}}.jpg"
+               alt="{{item.title}}">
         </a>
 
-        <a class="extra-img-link" [ngClass]="{'active': imgCaro === 4}" *ngIf="currentItem.imageUrlFour" (click)="imgCaros(4)">
+        <a class="extra-img-link" [ngClass]="{'active': imgCaro === 4}" *ngIf="item.imageUrlFour" (click)="imgCaros(4)">
           <img class="prod-img"
-               src="../../../assets/img/{{currentItem.imageUrlFour}}.jpg"
-               alt="{{currentItem.title}}">
+               src="../../../assets/img/{{item.imageUrlFour}}.jpg"
+               alt="{{item.title}}">
         </a>
       </div>
     </div>
     <!--Text-->
     <div class="col-sm-2"></div>
-    <div class="col-sm-4 details-container" *ngIf="currentItem">
-      <h3 class="title">{{currentItem.title}}
-        <a class="atwl fa" (click)="addToWishList(currentItem.id)">
+    <div class="col-sm-4 details-container" *ngIf="item">
+      <h3 class="title">{{item.title}}
+        <a class="atwl fa" (click)="addToWishList(item.id)">
           <i class="material-icons">favorite_border</i></a>
       </h3>
 
       <div class="description">
-        {{currentItem.description}}
+        {{item.description}}
       </div>
       <h4>
-        <span *ngIf="currentItem.price">Rs.</span> {{currentItem.price}}
+        <span *ngIf="item.price">Rs.</span> {{item.price}}
       </h4>
 
       <button class="buy" mat-button>
@@ -58,7 +59,7 @@
 <!--      <button class="atc" mat-button-->
 <!--              [ngClass]="getCartClass()"-->
 <!--              [disabled]="addedToCart"-->
-<!--              (click)="addToCart(currentItem.id)">-->
+<!--              (click)="addToCart(item.id)">-->
 <!--        <i class="fa fa-shopping-cart"></i>-->
 <!--        <span *ngIf="!addedToCart">Add to Cart</span>-->
 <!--        <span *ngIf="addedToCart">Added to Cart</span>-->

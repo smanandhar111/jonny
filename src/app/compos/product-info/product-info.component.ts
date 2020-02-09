@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from '../product/product.service';
 import {Observable, Subscription} from 'rxjs';
 import {ProductsModel} from '../product/products.model';
-import {every, map, tap} from 'rxjs/operators';
+import {catchError, every, map, tap} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../auth/auth.service';
 import {AddToFavModel} from '../../models/models';
@@ -14,11 +14,11 @@ import {AddToFavModel} from '../../models/models';
 })
 export class ProductInfoComponent implements OnInit, OnDestroy {
   prodIdSub: Subscription;
-  prodSub: Subscription;
   authSub: Subscription;
   isLogged: boolean;
   productId: string;
   imgCaro = 1;
+
   prodItems: ProductsModel[];
   currentItem: ProductsModel;
   addToFav: AddToFavModel = {
@@ -28,28 +28,29 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
   wishList$ = this.productService.wishList$.pipe(
 
   )
+  errMessage: string;
+
+  product$ = this.productService.products$
+    .pipe(
+      map(product =>
+        product.filter(prod => {
+          if (prod.id === this.productId) {
+            return prod;
+          }
+        })),
+      catchError(err => this.errMessage = err)
+    );
+
   constructor(private productService: ProductService,
               private activeRoute: ActivatedRoute,
               private authService: AuthService) { }
 
   ngOnInit() {
     this.getParamId();
-    this.getProductInfo();
   }
   getParamId(): void {
     this.prodIdSub = this.activeRoute.params.subscribe(params => {
       this.productId = params[`id`];
-    });
-  }
-  getProductInfo() {
-    this.productService.getProducts();
-    this.prodSub = this.productService.products$.subscribe(item => {
-      this.prodItems = item;
-      this.prodItems.forEach(i => {
-        if (i.id === this.productId) {
-          this.currentItem = i;
-        }
-      });
     });
   }
   imgCaros(numb) {

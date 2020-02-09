@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {ProductsModel} from './products.model';
-import {EMPTY, Observable} from 'rxjs';
+import {EMPTY} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {AddToFavModel} from '../../models/models';
+import {throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
