@@ -3,22 +3,23 @@ import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firest
 import {ProductsModel} from './products.model';
 import {EMPTY, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {WishCart} from '../../models/models';
+import {AddToFavModel} from '../../models/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   products$: Observable<ProductsModel[]>;
+  wishList$: Observable<AddToFavModel[]>;
   errMessage: string;
   itemCollection: AngularFirestoreCollection<ProductsModel>;
-  wishCollection: AngularFirestoreCollection<WishCart>;
+  wishCollection: AngularFirestoreCollection<AddToFavModel>;
   constructor(private afs: AngularFirestore) {
     this.itemCollection = this.afs.collection('items');
     this.wishCollection = this.afs.collection('wish');
   }
 
-  getProducts() {
+  getProducts(): void {
     this.products$ = this.itemCollection.snapshotChanges().pipe(
       map(changes => {
         return changes.map(a => {
@@ -33,10 +34,17 @@ export class ProductService {
       })
     );
   }
-  addItem(item: ProductsModel) {
-    this.itemCollection.add(item);
+
+  getWishListItems(): void {
+    this.wishList$ = this.wishCollection.snapshotChanges().pipe(
+      map(changes => {
+        return changes.map(a => {
+          return a.payload.doc.data() as AddToFavModel;
+        });
+      })
+    )
   }
-  // addToWish(id: string) {
-  //   this.wishCollection.add(id);
-  // }
+  addToWish(addToFav: AddToFavModel) {
+    this.wishCollection.add(addToFav);
+  }
 }
