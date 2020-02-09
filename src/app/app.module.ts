@@ -20,7 +20,6 @@ import { AngularFireModule } from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import { ProductComponent } from './compos/product/product.component';
 import {ProductService} from './compos/product/product.service';
-import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import { AddProductComponent } from './compos/add-product/add-product.component';
 import {FormsModule} from '@angular/forms';

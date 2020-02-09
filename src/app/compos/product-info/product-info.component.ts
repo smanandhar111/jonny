@@ -5,6 +5,7 @@ import {ProductsModel} from '../product/products.model';
 import {catchError, every, map, tap} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../auth/auth.service';
+import {AddToFavModel} from '../../models/models';
 
 @Component({
   selector: 'app-product-info',
@@ -17,6 +18,16 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
   isLogged: boolean;
   productId: string;
   imgCaro = 1;
+
+  prodItems: ProductsModel[];
+  currentItem: ProductsModel;
+  addToFav: AddToFavModel = {
+    uid: ''
+  };
+
+  wishList$ = this.productService.wishList$.pipe(
+
+  )
   errMessage: string;
 
   product$ = this.productService.products$
@@ -46,17 +57,11 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
     this.imgCaro = numb;
   }
 
-  checkAuthentication(): boolean {
-    this.authSub = this.authService.logStatus$.subscribe((data) => {
-      this.isLogged = data != null;
-    });
-    return this.isLogged;
-  }
-
   addToWishList(id: string) {
-    console.log('>>>', id);
-    if (this.checkAuthentication()) {
-      // this.productService.addToWish(id);
+    const sessionStoreAuth = sessionStorage.getItem('auth');
+    this.addToFav.uid = id;
+    if (sessionStoreAuth === 'true') {
+      this.productService.addToWish(this.addToFav);
     } else {
       this.authService.googleLogin();
     }

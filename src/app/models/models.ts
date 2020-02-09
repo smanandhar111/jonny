@@ -6,3 +6,7 @@ export interface ProductTypes {
 export interface WishCart {
   id: string;
 }
+
+export interface AddToFavModel {
+  uid: string;
+}

@@ -1,5 +1,6 @@
 <div class="ProdDisplayComp container" *ngIf="product$ | async as items">
   <div class="row" *ngFor="let item of items">
+
     <div class="col-sm-4 img-container row">
       <div class="primary-img">
         <img *ngIf="imgCaro === 1" class="prod-img" src="../../../assets/img/{{item.imageUrl}}.jpg"

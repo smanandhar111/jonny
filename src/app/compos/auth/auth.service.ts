@@ -8,14 +8,18 @@ import {Observable} from 'rxjs';
 })
 export class AuthService {
   login: Promise<any>;
-  logStatus$: Observable<any> = this.af.user;
+  logStatus$ = this.af.user;
   constructor(private af: AngularFireAuth) {}
 
   googleLogin() {
-    this.login = this.af.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    this.login = this.af.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
+      sessionStorage.setItem('auth', 'true');
+    });
   }
   googleLogout() {
-    this.af.auth.signOut();
+    this.af.auth.signOut().then(() => {
+      sessionStorage.setItem('auth', 'false');
+    });
   }
 }
 
