@@ -40,10 +40,16 @@
     <!--Text-->
     <div class="col-sm-2"></div>
     <div class="col-sm-4 details-container" *ngIf="item">
-      <h3 class="title">{{item.title}}
-        <a class="atwl fa" (click)="addToWishList(item.id)">
-          <i class="material-icons">favorite_border</i></a>
-      </h3>
+      <h3 class="title">{{item.title}}</h3>
+        <a class="atwl" (click)="addToFavClick(item.id, 'wish')">
+          <i class="add material-icons">favorite_border</i>
+        </a>
+
+<!--        <a *ngIf="wishListed" class="atwl" >-->
+<!--          <i class="remove material-icons">favorite</i>-->
+<!--        </a>-->
+
+
 
       <div class="description">
         {{item.description}}
@@ -52,9 +58,11 @@
         <span *ngIf="item.price">Rs.</span> {{item.price}}
       </h4>
 
-      <button class="buy" mat-button>
-        <i class="fa fa-credit-card"></i><span>Buy</span>
+      <button class="buy" mat-button (click)="addToFavClick(item.id, 'cart')">
+        <i class="material-icons">add_shopping_cart</i><span>Add to Cart</span>
       </button>
+      <h1>is this added to the cart : {{inCart}}</h1>
+
 
 <!--      <button class="atc" mat-button-->
 <!--              [ngClass]="getCartClass()"-->

@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from '../product/product.service';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, of, Subscription} from 'rxjs';
 import {ProductsModel} from '../product/products.model';
 import {catchError, every, map, tap} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
@@ -14,20 +14,12 @@ import {AddToFavModel} from '../../models/models';
 })
 export class ProductInfoComponent implements OnInit, OnDestroy {
   prodIdSub: Subscription;
-  authSub: Subscription;
-  isLogged: boolean;
   productId: string;
   imgCaro = 1;
-
-  prodItems: ProductsModel[];
-  currentItem: ProductsModel;
+  inCart: boolean;
   addToFav: AddToFavModel = {
     uid: ''
   };
-
-  wishList$ = this.productService.wishList$.pipe(
-
-  )
   errMessage: string;
 
   product$ = this.productService.products$
@@ -57,11 +49,15 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
     this.imgCaro = numb;
   }
 
-  addToWishList(id: string) {
+  addToFavClick(id: string, src: string) {
     const sessionStoreAuth = sessionStorage.getItem('auth');
     this.addToFav.uid = id;
     if (sessionStoreAuth === 'true') {
-      this.productService.addToWish(this.addToFav);
+      if (src === 'wish') {
+        this.productService.addToWish(this.addToFav);
+      } else {
+        this.productService.addToCart(this.addToFav);
+      }
     } else {
       this.authService.googleLogin();
     }
