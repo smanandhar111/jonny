@@ -97,5 +97,4 @@ export class AddProductComponent implements OnInit {
   changeCount(val) {
     this.imgCount = val;
   }
-
 }
