@@ -9,5 +9,4 @@ export interface WishCart {
 
 export interface AddToFavModel {
   uid: string;
-  wishListed?: boolean;
 }

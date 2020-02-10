@@ -15,16 +15,14 @@ export class AuthComponent implements OnInit, OnDestroy {
   userLoggedIn: boolean;
   authSub: Subscription;
   errMessage: string;
-  newObs$: Observable<any>;
   cartItems: number;
 
   cartItem$ = this.productService.cartItem$.pipe(
     map((wishes) => {
-      const noOfCartItems = wishes.length;
-      const newObs$ = of(noOfCartItems).subscribe((data) => this.cartItems = data);
+      of(wishes.length).subscribe((data) => this.cartItems = data);
     }),
     catchError(err => this.errMessage = err)
-  ).subscribe(() => console.log('okay'));
+  ).subscribe(() => console.log('okay')); // TODO: dont do anything
 
   constructor(private authService: AuthService,
               private productService: ProductService) { }
