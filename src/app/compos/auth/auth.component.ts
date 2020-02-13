@@ -16,6 +16,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   authSub: Subscription;
   errMessage: string;
   cartItems: number;
+  uuid: string;
 
   cartItem$ = this.productService.cartItem$.pipe(
     map((wishes) => {
@@ -31,7 +32,12 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.logStatus$.subscribe((data) => {
       this.authenticatedUserInfo = data;
       this.userLoggedIn = this.authenticatedUserInfo != null;
-
+      // setting uuid after using log in the first time
+      const sessionUuid = sessionStorage.getItem('uuid');
+      if (!sessionUuid) {
+        (this.userLoggedIn) ? sessionStorage.setItem('uuid', data.uid) :
+          sessionStorage.setItem('uuid', null);
+      }
       const sessionAuth = sessionStorage.getItem('auth');
       if (!sessionAuth) {
         (this.userLoggedIn) ? sessionStorage.setItem('auth', 'true') :

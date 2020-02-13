@@ -14,11 +14,16 @@ export class AuthService {
   googleLogin() {
     this.login = this.af.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
       sessionStorage.setItem('auth', 'true');
+
+      this.logStatus$.subscribe((data) => {
+        sessionStorage.setItem('uuid', data.uid);
+      });
     });
   }
   googleLogout() {
     this.af.auth.signOut().then(() => {
       sessionStorage.setItem('auth', 'false');
+      sessionStorage.setItem('uuid', null);
     });
   }
 }
