@@ -31,11 +31,11 @@ export class AuthComponent implements OnInit, OnDestroy {
       }
       // setting uuid after using log in the first time
       const sessionUuid = sessionStorage.getItem('uuid');
+      const sessionAuth = sessionStorage.getItem('auth');
       if (!sessionUuid) {
         (this.userLoggedIn) ? sessionStorage.setItem('uuid', data.uid) :
           sessionStorage.setItem('uuid', null);
       }
-      const sessionAuth = sessionStorage.getItem('auth');
       if (!sessionAuth) {
         (this.userLoggedIn) ? sessionStorage.setItem('auth', 'true') :
           sessionStorage.setItem('auth', 'false');
