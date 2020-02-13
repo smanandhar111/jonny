@@ -11,9 +11,10 @@ import {throwError } from 'rxjs';
 })
 export class ProductService {
   errMessage: string;
+  uuid: string;
   itemCollection = this.afs.collection('items');
   wishCollection = this.afs.collection('wish');
-  cartCollection = this.afs.collection('cart');
+  cartCollection;
   constructor(private afs: AngularFirestore) {}
 
   products$ = this.itemCollection.snapshotChanges().pipe(
@@ -36,14 +37,14 @@ export class ProductService {
     catchError(this.handleError)
   );
 
-  cartItem$ = this.cartCollection.snapshotChanges().pipe(
-    map(changes => {
-      return changes.map(a => {
-        return a.payload.doc.data() as AddToFavModel;
-      });
-    }),
-    catchError(this.handleError)
-  );
+  // cartItem$ = this.cartCollection.snapshotChanges().pipe(
+  //   map(changes => {
+  //     return changes.map(a => {
+  //       return a.payload.doc.data() as AddToFavModel;
+  //     });
+  //   }),
+  //   catchError(this.handleError)
+  // );
 
   handleError(err: any) {
     let errorMessage: string;
@@ -68,6 +69,6 @@ export class ProductService {
   }
 
   addToCart(addToFav: AddToFavModel) {
-    this.cartCollection.add(addToFav);
+    this.afs.collection(`userData/${this.uuid}/cart`).add(addToFav);
   }
 }
