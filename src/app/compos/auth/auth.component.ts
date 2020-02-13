@@ -15,24 +15,39 @@ export class AuthComponent implements OnInit, OnDestroy {
   userLoggedIn: boolean;
   authSub: Subscription;
   errMessage: string;
-  cartItems: number;
+  cartLength: number;
+  uuid: string;
 
-  cartItem$ = this.productService.cartItem$.pipe(
-    map((wishes) => {
-      of(wishes.length).subscribe((data) => this.cartItems = data);
-    }),
-    catchError(err => this.errMessage = err)
-  ).subscribe(() => console.log('okay')); // TODO: dont do anything
 
   constructor(private authService: AuthService,
               private productService: ProductService) { }
 
   ngOnInit() {
-    this.authSub = this.authService.logStatus$.subscribe((data) => {
-      this.authenticatedUserInfo = data;
+    this.authSub = this.authService.logStatus$.subscribe((user) => {
+      this.authenticatedUserInfo = user;
       this.userLoggedIn = this.authenticatedUserInfo != null;
 
+      if (this.userLoggedIn) {
+        this.productService.uuid = user.uid;
+
+        // Waiting 2 seconds for UUID to be in the productService
+        // Todo: Find a way not to use Timeout
+        setTimeout(() => {
+          this.productService.getUserData();
+          if (this.productService.cartItems$) {
+            this.productService.cartItems$.subscribe(cart => {
+              this.cartLength = cart.length;
+            });
+          }
+        }, 2000);
+      }
+      // setting uuid after using log in the first time
+      const sessionUuid = sessionStorage.getItem('uuid');
       const sessionAuth = sessionStorage.getItem('auth');
+      if (!sessionUuid) {
+        (this.userLoggedIn) ? sessionStorage.setItem('uuid', user.uid) :
+          sessionStorage.setItem('uuid', null);
+      }
       if (!sessionAuth) {
         (this.userLoggedIn) ? sessionStorage.setItem('auth', 'true') :
           sessionStorage.setItem('auth', 'false');

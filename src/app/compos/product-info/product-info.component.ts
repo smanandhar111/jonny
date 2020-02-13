@@ -1,8 +1,7 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from '../product/product.service';
-import {Observable, of, Subscription} from 'rxjs';
-import {ProductsModel} from '../product/products.model';
-import {catchError, every, map, tap} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../auth/auth.service';
 import {AddToFavModel} from '../../models/models';

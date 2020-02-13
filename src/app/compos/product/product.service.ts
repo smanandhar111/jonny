@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {ProductsModel} from './products.model';
-import {EMPTY, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {AddToFavModel} from '../../models/models';
 import {throwError } from 'rxjs';
@@ -10,11 +10,13 @@ import {throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class ProductService {
-  errMessage: string;
+  uuid: string;
   itemCollection = this.afs.collection('items');
   wishCollection = this.afs.collection('wish');
-  cartCollection = this.afs.collection('cart');
-  constructor(private afs: AngularFirestore) {}
+  cartItems$: Observable<AddToFavModel[]>;
+  constructor(private afs: AngularFirestore) {
+      this.getUserData();
+  }
 
   products$ = this.itemCollection.snapshotChanges().pipe(
     map(changes => {
@@ -27,23 +29,17 @@ export class ProductService {
     catchError(this.handleError)
   );
 
-  wishList$ = this.wishCollection.snapshotChanges().pipe(
-    map(changes => {
-      return changes.map(a => {
-        return a.payload.doc.data() as AddToFavModel;
-      });
-    }),
-    catchError(this.handleError)
-  );
-
-  cartItem$ = this.cartCollection.snapshotChanges().pipe(
-    map(changes => {
-      return changes.map(a => {
-        return a.payload.doc.data() as AddToFavModel;
-      });
-    }),
-    catchError(this.handleError)
-  );
+  getUserData(): void {
+    this.cartItems$ = this.afs.collection(`userData/${this.uuid}/cart`).snapshotChanges()
+      .pipe(
+        map(changes => {
+        return changes.map(a => {
+          return a.payload.doc.data() as AddToFavModel;
+        });
+      }),
+        catchError(this.handleError)
+      );
+  }
 
   handleError(err: any) {
     let errorMessage: string;
@@ -68,6 +64,6 @@ export class ProductService {
   }
 
   addToCart(addToFav: AddToFavModel) {
-    this.cartCollection.add(addToFav);
+    this.afs.collection(`userData/${this.uuid}/cart`).add(addToFav);
   }
 }
