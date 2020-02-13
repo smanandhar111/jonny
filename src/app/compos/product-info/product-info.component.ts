@@ -13,7 +13,7 @@ import {AddToFavModel} from '../../models/models';
 })
 export class ProductInfoComponent implements OnInit, OnDestroy {
   prodIdSub: Subscription;
-  productId: string;
+  productId = this.activeRoute.snapshot.paramMap.get('id');
   imgCaro = 1;
   inCart: boolean;
   addToFav: AddToFavModel = {
@@ -37,12 +37,7 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
               private authService: AuthService) { }
 
   ngOnInit() {
-    this.getParamId();
-  }
-  getParamId(): void {
-    this.prodIdSub = this.activeRoute.params.subscribe(params => {
-      this.productId = params[`id`];
-    });
+    console.log('route', this.activeRoute.snapshot.paramMap.get('id'));
   }
   imgCaros(numb) {
     this.imgCaro = numb;
@@ -62,6 +57,5 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(): void {
-    this.prodIdSub.unsubscribe();
   }
 }
