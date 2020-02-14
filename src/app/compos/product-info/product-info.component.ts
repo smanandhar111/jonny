@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from '../product/product.service';
-import {Subscription} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../auth/auth.service';
@@ -87,12 +86,7 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  test(): void {
-    console.log('test okay');
-  }
-
   addToFavClick(id: string, src: string) {
-    console.log('PP');
     this.addToFav.uid = id;
     if (this.sessionStoreAuth === 'true') {
       if (src === 'wish') {
@@ -117,7 +111,6 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
         return this.wished ? true : false;
       }
     } else {
-      console.log('its false');
       return false;
     }
   }
