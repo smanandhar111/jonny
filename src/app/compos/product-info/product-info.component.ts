@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from '../product/product.service';
-import {Subscription} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../auth/auth.service';
@@ -12,14 +11,15 @@ import {AddToFavModel} from '../../models/models';
   styleUrls: ['./product-info.component.scss']
 })
 export class ProductInfoComponent implements OnInit, OnDestroy {
-  prodIdSub: Subscription;
-  productId: string;
+  productId = this.activeRoute.snapshot.paramMap.get('id');
+  sessionStoreAuth = sessionStorage.getItem('auth');
   imgCaro = 1;
   inCart: boolean;
+  wished: boolean;
+  errMessage: string;
   addToFav: AddToFavModel = {
     uid: ''
   };
-  errMessage: string;
 
   product$ = this.productService.products$
     .pipe(
@@ -37,21 +37,58 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
               private authService: AuthService) { }
 
   ngOnInit() {
-    this.getParamId();
-  }
-  getParamId(): void {
-    this.prodIdSub = this.activeRoute.params.subscribe(params => {
-      this.productId = params[`id`];
+    // getting cartData
+    setTimeout(() => {
+      this.getCartData();
+      }, 2000);
+
+    this.authService.logStatus$.subscribe((user) => {
+      if (user != null) {
+        this.getCartData();
+      } else {
+        this.inCart = false;
+        this.wished = false;
+      }
     });
   }
   imgCaros(numb) {
     this.imgCaro = numb;
   }
 
+  getCartData(): void {
+    this.productService.getUserData();
+    // Getting CartItems
+    this.productService.cartItems$.pipe(
+      map((cartItems) => {
+        for (let i = 0; i < cartItems.length; i++) {
+          if (cartItems[i].uid === this.productId) {
+            this.inCart = true;
+            break;
+          } else {
+            this.inCart = false;
+          }
+        }
+      })
+    ).subscribe(cart => {
+    });
+
+    this.productService.wishList$.pipe(
+      map((wishLists) => {
+        for (let i = 0; i < wishLists.length; i++) {
+          if (wishLists[i].uid === this.productId) {
+            this.wished = true;
+            break;
+          } else {
+            this.wished = false;
+          }
+        }
+      })
+    ).subscribe();
+  }
+
   addToFavClick(id: string, src: string) {
-    const sessionStoreAuth = sessionStorage.getItem('auth');
     this.addToFav.uid = id;
-    if (sessionStoreAuth === 'true') {
+    if (this.sessionStoreAuth === 'true') {
       if (src === 'wish') {
         this.productService.addToWish(this.addToFav);
       } else {
@@ -62,6 +99,19 @@ export class ProductInfoComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(): void {
-    this.prodIdSub.unsubscribe();
+  }
+
+  addCartDisabled(src): boolean {
+    // Todo: initially this.inCart returned undefined for 2 secounds until
+    // Todo: but returns a boolean after the uuid is set and cartItems$ fires
+    if (this.sessionStoreAuth === 'true') {
+      if (src === 'cart') {
+        return this.inCart ?  true : false;
+      } else {
+        return this.wished ? true : false;
+      }
+    } else {
+      return false;
+    }
   }
 }
