@@ -14,6 +14,7 @@ export class ProductService {
   itemCollection = this.afs.collection('items');
   wishCollection = this.afs.collection('wish');
   cartItems$: Observable<AddToFavModel[]>;
+  wishList$: Observable<AddToFavModel[]>;
   constructor(private afs: AngularFirestore) {
       this.getUserData();
   }
@@ -39,6 +40,16 @@ export class ProductService {
       }),
         catchError(this.handleError)
       );
+
+    this.wishList$ = this.afs.collection(`userData/${this.uuid}/wish`).snapshotChanges()
+      .pipe(
+        map(changes => {
+          return changes.map(a => {
+            return a.payload.doc.data() as AddToFavModel;
+          });
+        }),
+        catchError(this.handleError)
+      );
   }
 
   handleError(err: any) {
@@ -56,7 +67,7 @@ export class ProductService {
   }
 
   addToWish(addToFav: AddToFavModel) {
-    this.wishCollection.add(addToFav);
+    this.afs.collection(`userData/${this.uuid}/wish`).add(addToFav);
   }
 
   addItem(item: ProductsModel) {

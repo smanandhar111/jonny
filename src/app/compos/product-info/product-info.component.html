@@ -41,15 +41,15 @@
     <div class="col-sm-2"></div>
     <div class="col-sm-4 details-container" *ngIf="item">
       <h3 class="title">{{item.title}}</h3>
-        <a class="atwl" (click)="addToFavClick(item.id, 'wish')">
-          <i class="add material-icons">favorite_border</i>
-        </a>
 
-<!--        <a *ngIf="wishListed" class="atwl" >-->
-<!--          <i class="remove material-icons">favorite</i>-->
-<!--        </a>-->
-
-
+      <button mat-button class="atwl"
+              *ngIf="!wished"
+              (click)="addToFavClick(item.id, 'wish')">
+        <i class="add material-icons">favorite_border</i>
+      </button>
+      <button class="atwl wished" *ngIf="wished">
+        <i class="add material-icons">favorite</i>
+      </button>
 
       <div class="description">
         {{item.description}}
@@ -58,10 +58,14 @@
         <span *ngIf="item.price">Rs.</span> {{item.price}}
       </h4>
 
-      <button class="buy" mat-button (click)="addToFavClick(item.id, 'cart')">
+
+      <button [disabled]="addCartDisabled('cart')" *ngIf="!inCart" class="buy" mat-button (click)="addToFavClick(item.id, 'cart')">
         <i class="material-icons">add_shopping_cart</i><span>Add to Cart</span>
       </button>
-      <h1>is this added to the cart : {{inCart}}</h1>
+
+      <button *ngIf="inCart" class="buy added" mat-button [disabled]="inCart">
+        <i class="material-icons">shopping_cart</i><span>Added to Cart</span>
+      </button>
 
 
 <!--      <button class="atc" mat-button-->
